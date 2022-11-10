@@ -10,6 +10,5 @@ int main() {
     circle.set_coordinates(new_coordinates1);
     circle.set_radius(1.616);
     float rad = circle.get_radius();
-    float vol = circle.get_volume();
-    std::cout << rad << "\t" << "\t" << vol << '\n';
+    std::cout << rad << "\t" << '\n';
 }
