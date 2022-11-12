@@ -5,6 +5,11 @@
 
 class Sphere{
     public:
+    Sphere(size_t i_pid, float rad ,float position[3]) {
+      this->set_particle_id(i_pid);
+      this->set_radius(rad);
+      this->set_coordinates(position);
+   }
         // get
         float get_radius() const {return this->radius;}
         const float* get_coordinates() const {return this->coordinates;}
