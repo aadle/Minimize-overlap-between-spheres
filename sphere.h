@@ -22,6 +22,8 @@ class Sphere{
             this->coordinates[1] = position[1];
             this->coordinates[2] = position[2];
         }
+
+        int check_collision(Sphere* other_s);
          
     private:
         float coordinates[3] {0.0, 0.0, 0.0};
