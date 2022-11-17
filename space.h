@@ -3,6 +3,8 @@
 
 #include <math.h>
 #include <vector>
+#include <iostream>
+#include <map>
 
 #include "sphere.h"
 
@@ -13,15 +15,17 @@ class Space {
         void set_axis_length(float length[3]);
 
         int get_N() const {return this->num_spheres;}
-        std::vector<Sphere> get_spheres() {return this->Spheres;}
+        std::vector<Sphere> get_spheres() {return this->spheres;}
 
         long count_collisions();
 
     private:
-        int num_spheres = 0;  // totlal number of spheres
+        int num_spheres = 0;  // total number of spheres
         float volume = 0.0;
         double axis_length[3];
-        std::vector<Sphere> Spheres;
+        std::vector<Sphere> spheres;
+        std::multimap<double, int, std::greater<int>> components;
+        std::vector<std::vector<Sphere>> particles;
 
 };
 

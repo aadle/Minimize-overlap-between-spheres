@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include "space.h"
 
 
@@ -18,16 +17,24 @@ void Space::input(std::istream* source)
       // create new component
       float sphere_radius = 0.0;
       *source >> sphere_radius;;
+
+      // inserts sphere with unique sphere id
+      this->components.insert({sphere_radius, sphere_id});
+
+      // insert a new vector
+      this->particles.push_back(std::vector<Sphere>());
       
       // now read all the particles
       for(size_t i = 0; i < num_objects; i++)
       {
-         // read the coordinates
+         // read the coordinates for the spheres
         float coords[3];
         *source >> coords[0] >> coords[1] >> coords[2];
 
         // adds the new Sphere to the vector Spheres 
-        this->Spheres.push_back(Sphere(sphere_id,sphere_radius,coords));
+        this->spheres.push_back(Sphere(sphere_id,sphere_radius,coords));
+        
+        this->particles[sphere_id].push_back(Sphere(sphere_id, sphere_radius, coords));
 
         // updates sphere_id
         sphere_id++;
@@ -36,13 +43,7 @@ void Space::input(std::istream* source)
     }
 }
 
-
 void Space::set_axis_length(float length[3]) {
-    /*
-    for(int i=0; i < 3; i++) {
-    this->axis_length[i] = length[i];
-    }
-    */
     this->axis_length[0] = length[0];
     this->axis_length[1] = length[1];
     this->axis_length[2] = length[2];
