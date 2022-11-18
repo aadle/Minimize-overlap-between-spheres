@@ -48,3 +48,30 @@ void Space::set_axis_length(float length[3]) {
     this->axis_length[1] = length[1];
     this->axis_length[2] = length[2];
 }
+
+long Space::count_collisions() {
+   long num_collisions = 0;
+
+   for(auto comp1 = this->components.begin(); comp1!= this->components.end(); comp1++) {
+      for(auto comp2 = comp1; comp2 != this->components.end(); comp2++) {
+         
+         // If components are equal, iterate through unique pairs of particles within the component.
+         if(comp1->second == comp2->second) {
+            for(auto i = this->particles[comp1->second].begin(); std::next(i) != this->particles[comp1->second].end(); i++){
+               for(auto j = std::next(i); j != this->particles[comp2->second].end(); j++) {
+                  
+                  // if(i->check_collision(&(*j), this->)); skriv inn check_collisions sjekken når vi har skrevet hele.
+               }
+            }
+         }
+         else {
+            for(auto i = this->particles[comp1->second].begin(); i != this->particles[comp1->second].end(); i++) {
+               for(auto j = this->particles[comp2->second].begin(); i != this->particles[comp2->second].end(); j++) {
+                  // if(i->check_collision(&(*j), this->)); skriv inn check_collisions sjekken når vi har skrevet hele.
+               }
+            }
+         }
+      }
+   }
+   return num_collisions;
+}
