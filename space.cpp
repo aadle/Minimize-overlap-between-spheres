@@ -32,6 +32,12 @@ void Space::input(std::istream* source)
         float coords[3];
         *source >> coords[0] >> coords[1] >> coords[2];
 
+         
+         for(int k = 0; k < 3; k++) {
+            while(coords[k] < 0.0) coords[k] += this->axis_length[k];
+            while(coords[k] > this->axis_length[k]) coords[k] -= this->axis_length[k];
+         }
+
         // adds the new Sphere to the vector Spheres 
         this->spheres.push_back(Sphere(sphere_id,sphere_radius,coords));
         
@@ -52,7 +58,7 @@ void Space::set_axis_length(float length[3]) {
 long Space::count_collisions() {
    long num_collisions = 0;
 
-   for(auto comp1 = this->components.begin(); comp1!= this->components.end(); comp1++) {
+   for(auto comp1 = this->components.begin(); comp1 != this->components.end(); comp1++)
       for(auto comp2 = comp1; comp2 != this->components.end(); comp2++) {
          
          // If components are equal, iterate through unique pairs of particles within the component.
@@ -60,18 +66,17 @@ long Space::count_collisions() {
             for(auto i = this->particles[comp1->second].begin(); std::next(i) != this->particles[comp1->second].end(); i++){
                for(auto j = std::next(i); j != this->particles[comp2->second].end(); j++) {
                   
-                  // if(i->check_collision(&(*j), this->)); skriv inn check_collisions sjekken når vi har skrevet hele.
+                  if(i->check_collision(&(*j), this->axis_length)) num_collisions++;
                }
             }
          }
          else {
             for(auto i = this->particles[comp1->second].begin(); i != this->particles[comp1->second].end(); i++) {
-               for(auto j = this->particles[comp2->second].begin(); i != this->particles[comp2->second].end(); j++) {
-                  // if(i->check_collision(&(*j), this->)); skriv inn check_collisions sjekken når vi har skrevet hele.
+               for(auto j = this->particles[comp2->second].begin(); j != this->particles[comp2->second].end(); j++) {
+                  if(i->check_collision(&(*j), this->axis_length)) num_collisions++;
                }
             }
          }
       }
-   }
    return num_collisions;
 }

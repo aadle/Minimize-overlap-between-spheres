@@ -15,6 +15,8 @@ class Space {
         void set_axis_length(float length[3]);
 
         int get_N() const {return this->num_spheres;}
+        const double* get_coordinates() const {return this->axis_length;}
+
         std::vector<Sphere> get_spheres() {return this->spheres;}
 
         long count_collisions();

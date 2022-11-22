@@ -23,7 +23,7 @@ class Sphere{
             this->coordinates[2] = position[2];
         }
 
-        int check_collision(Sphere* other_s);
+        int check_collision(Sphere* other_s, const double box_size[3]);
          
     private:
         float coordinates[3] {0.0, 0.0, 0.0};
