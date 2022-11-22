@@ -19,11 +19,11 @@ void Space::input(std::istream* source)
       *source >> sphere_radius;;
 
       // inserts sphere with unique sphere id
-      this->components.insert({sphere_radius, sphere_id});
+      //this->components.insert({sphere_radius, sphere_id});
 
       // insert a new vector
-      this->particles.push_back(std::vector<Sphere>());
-      
+      //this->particles.push_back(std::vector<Sphere>());
+
       // now read all the particles
       for(size_t i = 0; i < num_objects; i++)
       {
@@ -34,7 +34,7 @@ void Space::input(std::istream* source)
         // adds the new Sphere to the vector Spheres 
         this->spheres.push_back(Sphere(sphere_id,sphere_radius,coords));
         
-        this->particles[sphere_id].push_back(Sphere(sphere_id, sphere_radius, coords));
+        // this->particles[sphere_id].push_back(Sphere(sphere_id, sphere_radius, coords));
 
         // updates sphere_id
         sphere_id++;
