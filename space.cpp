@@ -9,7 +9,6 @@ void Space::input(std::istream* source)
    
    int sphere_id = 0;
    size_t num_objects = 0;  // number of particles of a certain component
-   this-> num_spheres = 0;
 
    *source >> num_objects;  // input number of particles of component 0
    // this->num_spheres=num_spheres+num_objects;
@@ -17,7 +16,8 @@ void Space::input(std::istream* source)
    {
       // create new component
       float sphere_radius = 0.0;
-      *source >> sphere_radius;;
+      *source >> sphere_radius;
+      sphere_radius = sphere_radius/2; // change: input is diameter, instantly get radii after reading input
 
       // inserts sphere with unique sphere id
       this->components.insert({sphere_radius, sphere_id});
@@ -32,14 +32,14 @@ void Space::input(std::istream* source)
         float coords[3];
         *source >> coords[0] >> coords[1] >> coords[2];
 
-         
+         // Apply periodic boundary conditions
          for(int k = 0; k < 3; k++) {
             while(coords[k] < 0.0) coords[k] += this->axis_length[k];
             while(coords[k] > this->axis_length[k]) coords[k] -= this->axis_length[k];
          }
 
         // adds the new Sphere to the vector Spheres 
-        this->spheres.push_back(Sphere(sphere_id,sphere_radius,coords));
+        this->spheres.push_back(Sphere(sphere_id, sphere_radius, coords));
         
         this->particles[sphere_id].push_back(Sphere(this->num_spheres++, sphere_radius, coords));
         }
@@ -58,6 +58,7 @@ void Space::set_axis_length(float length[3]) {
 long Space::count_collisions() {
    long num_collisions = 0;
 
+   // iterate through unique pairs of components
    for(auto comp1 = this->components.begin(); comp1 != this->components.end(); comp1++)
       for(auto comp2 = comp1; comp2 != this->components.end(); comp2++) {
          
@@ -70,6 +71,7 @@ long Space::count_collisions() {
                }
             }
          }
+         
          else {
             for(auto i = this->particles[comp1->second].begin(); i != this->particles[comp1->second].end(); i++) {
                for(auto j = this->particles[comp2->second].begin(); j != this->particles[comp2->second].end(); j++) {
@@ -78,5 +80,6 @@ long Space::count_collisions() {
             }
          }
       }
+   
    return num_collisions;
 }

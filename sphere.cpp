@@ -10,8 +10,7 @@ int Sphere::check_collision(Sphere* other_s, const double box_size[3]) {
 
       sq_distance += distance*distance;
    }
-   float sum_radius = (this->radius + other_s->radius) * 0.5;
-   // int collision = 0;
+   float sum_radius = (this->radius + other_s->radius);
    bool collision = (sq_distance < sum_radius*sum_radius);
 
    if(sq_distance < 0.25*sum_radius*sum_radius) collision = 8;  
