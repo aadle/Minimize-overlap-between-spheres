@@ -15,6 +15,9 @@ int Sphere::check_collision(Sphere* other_s, const double box_size[3]) {
 
    if(sq_distance < 0.25*sum_radius*sum_radius) collision = 8;  
    else if(sq_distance < sum_radius*sum_radius) collision = 1;
+
+   if(collision) this->collisions = true;
+   else this->collisions = false;
    
    return collision;
 }
