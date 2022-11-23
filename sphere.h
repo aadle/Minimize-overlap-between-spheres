@@ -29,7 +29,7 @@ class Sphere{
         float coordinates[3] {0.0, 0.0, 0.0};
         float radius = 0.0;
         size_t particle_id = 0;
-        bool collisions = false; 
+        bool collisions = false;
         
 };
 
