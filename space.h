@@ -17,7 +17,7 @@ class Space {
         int get_N() const {return this->num_spheres;}
         const double* get_coordinates() const {return this->axis_length;} // useless?
         std::map<double, int> get_comp() const {return this->components;}
-        std::vector<Sphere> get_spheres() {return this->spheres;}
+        std::vector<Sphere> get_spheres() {return this->collided_spheres;}
 
         long count_collisions();
 
@@ -28,7 +28,7 @@ class Space {
         float volume = 0.0;
         double axis_length[3];
         int minimum_collisions = 0;
-        std::vector<Sphere> spheres;
+        std::vector<Sphere> collided_spheres;
         std::map<double, int> components;
         std::vector<std::vector<Sphere>> particles;
 

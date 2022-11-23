@@ -37,9 +37,6 @@ void Space::input(std::istream* source)
             while(coords[k] < 0.0) coords[k] += this->axis_length[k];
             while(coords[k] > this->axis_length[k]) coords[k] -= this->axis_length[k];
          }
-
-        // adds the new Sphere to the vector Spheres 
-        this->spheres.push_back(Sphere(sphere_id, sphere_radius, coords));
         
         this->particles[sphere_id].push_back(Sphere(this->num_spheres++, sphere_radius, coords));
         }
@@ -67,16 +64,21 @@ long Space::count_collisions() {
             for(auto i = this->particles[comp1->second].begin(); std::next(i) != this->particles[comp1->second].end(); i++){
                for(auto j = std::next(i); j != this->particles[comp2->second].end(); j++) {
                   
-                  if(i->check_collision(&(*j), this->axis_length)) num_collisions++;
+                  if(i->check_collision(&(*j), this->axis_length)) {
+                     num_collisions++;
+                     this->collided_spheres.push_back(*j);
+                  }
                }
             }
          }
          
          else {
-            for(auto i = this->particles[comp1->second].begin(); i != this->particles[comp1->second].end(); i++) {
+            for(auto i = this->particles[comp1->second].begin(); i != this->particles[comp1->second].end(); i++)
                for(auto j = this->particles[comp2->second].begin(); j != this->particles[comp2->second].end(); j++) {
-                  if(i->check_collision(&(*j), this->axis_length)) num_collisions++;
-               }
+                  if(i->check_collision(&(*j), this->axis_length)) {
+                     num_collisions++;
+                     this->collided_spheres.push_back(*j);
+                  }
             }
          }
       }
@@ -85,11 +87,11 @@ long Space::count_collisions() {
 }
 
 
-int Space::calculate_min_collision(){
+int Space::calculate_min_collision() {
    this->minimum_collisions=10;
-   for (int i= 0; i<100000; i++){
-      for(std::vector<Sphere> &sphere_vector : this->particles){
-         for(Sphere &kule : sphere_vector){
+   for (int i= 0; i<100000; i++) {
+      for(std::vector<Sphere> &sphere_vector : this->particles) {
+         for(Sphere &kule : sphere_vector) {
             const float radius = kule.get_radius();
             float new_coords[3];
             new_coords[0] = radius + (rand() / ( RAND_MAX / ((this->axis_length[0]-radius)-radius) ) );
