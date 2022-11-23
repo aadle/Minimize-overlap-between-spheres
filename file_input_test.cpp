@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 
 
    std::vector<Sphere> Sphere_list = cube.get_spheres();
-   int col = Sphere_list[0].check_collision(&Sphere_list[1]);
+   int col = Sphere_list[0].check_collision(&Sphere_list[1], cube.get_coordinates());
    std::cout<<col;
    for(Sphere s:Sphere_list){
    const float* sphere_coord = s.get_coordinates();
