@@ -21,10 +21,13 @@ class Space {
 
         long count_collisions();
 
+        int calculate_min_collision();
+
     private:
         int num_spheres = 0;  // total number of spheres
         float volume = 0.0;
         double axis_length[3];
+        int minimum_collisions = 0;
         std::vector<Sphere> spheres;
         std::map<double, int> components;
         std::vector<std::vector<Sphere>> particles;

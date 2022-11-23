@@ -83,3 +83,23 @@ long Space::count_collisions() {
    
    return num_collisions;
 }
+
+
+int Space::calculate_min_collision(){
+   this->minimum_collisions=10;
+   for (int i= 0; i<100000; i++){
+      for(std::vector<Sphere> &sphere_vector : this->particles){
+         for(Sphere &kule : sphere_vector){
+            const float radius = kule.get_radius();
+            float new_coords[3];
+            new_coords[0] = radius + (rand() / ( RAND_MAX / ((this->axis_length[0]-radius)-radius) ) );
+            new_coords[1] = radius + (rand() / ( RAND_MAX / ((this->axis_length[1]-radius)-radius) ) );
+            new_coords[2] = radius + (rand() / ( RAND_MAX / ((this->axis_length[2]-radius)-radius) ) );
+            kule.set_coordinates(new_coords);
+         }; 
+      }
+      int collisions = this->count_collisions();
+      if(this->minimum_collisions > collisions) {this->minimum_collisions=collisions;}
+   }
+   return this->minimum_collisions;
+}
