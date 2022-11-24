@@ -54,6 +54,7 @@ void Space::set_axis_length(float length[3]) {
 
 long Space::count_collisions() {
    long num_collisions = 0;
+   this->collided_spheres.clear();
 
    // iterate through unique pairs of components
    for(auto comp1 = this->components.begin(); comp1 != this->components.end(); comp1++)
@@ -87,7 +88,7 @@ long Space::count_collisions() {
 }
 
 
-int Space::calculate_min_collision() {
+int Space::mc_min_collision() {
    this->minimum_collisions=10;
    for (int i= 0; i<100000; i++) {
       for(std::vector<Sphere> &sphere_vector : this->particles) {
@@ -102,6 +103,23 @@ int Space::calculate_min_collision() {
       }
       int collisions = this->count_collisions();
       if(this->minimum_collisions > collisions) {this->minimum_collisions=collisions;}
+   }
+   return this->minimum_collisions;
+}
+
+int Space::advance_mc_min_collision(){
+   this->minimum_collisions=10;
+   for (int i= 0; i<100000; i++) {
+      for(auto &kule : this->collided_spheres) {
+         const float radius = kule.get_radius();
+         float new_coords[3];
+         new_coords[0] = radius + (rand() / ( RAND_MAX / ((this->axis_length[0]-radius)-radius) ) );
+         new_coords[1] = radius + (rand() / ( RAND_MAX / ((this->axis_length[1]-radius)-radius) ) );
+         new_coords[2] = radius + (rand() / ( RAND_MAX / ((this->axis_length[2]-radius)-radius) ) );
+         kule.set_coordinates(new_coords);
+      }; 
+   int collisions = this->count_collisions();
+   if(this->minimum_collisions > collisions) {this->minimum_collisions=collisions;}
    }
    return this->minimum_collisions;
 }

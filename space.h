@@ -21,7 +21,9 @@ class Space {
 
         long count_collisions();
 
-        int calculate_min_collision();
+        int mc_min_collision();
+
+        int advance_mc_min_collision();
 
     private:
         int num_spheres = 0;  // total number of spheres
