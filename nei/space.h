@@ -17,16 +17,19 @@ class Space {
         int get_N() const {return this->num_spheres;}
         const double* get_coordinates() const {return this->axis_length;} // useless?
         std::map<double, int> get_comp() const {return this->components;}
-        std::vector<Sphere> get_spheres() {return this->collided_spheres;}
+        std::vector<Sphere> get_spheres() const {return this->collided_spheres;}
 
-        std::map<double, int> get_components() {return this->components;}
-        std::vector<std::vector<Sphere>> get_particles() {return this->particles;}
+        bool sphere_in_vector(Sphere s1);
 
         long count_collisions();
 
         int mc_min_collision();
 
         int advance_mc_min_collision();
+
+        void move_spheres();
+        void move_marked();
+        void manage_configs(int num_configs);
 
     private:
         int num_spheres = 0;  // total number of spheres

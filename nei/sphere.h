@@ -13,7 +13,7 @@ class Sphere{
         // get
         float get_radius() const {return this->radius;}
         void get_coordinates(float* result);
-        bool get_collision() const {return this->collisions;}
+        size_t get_particle_id() const {return this->particle_id;}
 
         // set
         void set_radius(float r) {this->radius = r;}
@@ -23,8 +23,6 @@ class Sphere{
             this->coordinates[1] = position[1];
             this->coordinates[2] = position[2];
         }
-
-        void set_collision(bool collis){this->collisions=collis;}
 
         int check_collision(Sphere* other_s, const double box_size[3]);
          

@@ -116,8 +116,7 @@ int Space::mc_min_collision() {
    return this->minimum_collisions;
 }
 
-int Space::advance_mc_min_collision(){
-   //this->minimum_collisions=10;
+int Space::advance_mc_min_collision() {
    for (int i= 0; i<10000; i++) {
       for(std::vector<Sphere> &sphere_vector : this->particles) {
          for(Sphere &kule : sphere_vector) {
@@ -134,5 +133,6 @@ int Space::advance_mc_min_collision(){
    int collisions = this->count_collisions();
    if(this->minimum_collisions > collisions) {this->minimum_collisions=collisions;}
    }
+   
    return this->minimum_collisions;
 }

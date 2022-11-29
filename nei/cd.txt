@@ -1,0 +1,1 @@
+cd /mnt/c/users/aarlm/Documents/INF205/Project/Minimize\ overlap\ between\ spheres/
