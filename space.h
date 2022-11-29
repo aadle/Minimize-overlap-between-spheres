@@ -28,6 +28,11 @@ class Space {
 
         int advance_mc_min_collision();
 
+        int do_collision_min_collision();
+        void randomize_all_coordinates();
+        void print_coordinates();
+
+
     private:
         int num_spheres = 0;  // total number of spheres
         float volume = 0.0;
