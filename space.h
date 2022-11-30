@@ -12,7 +12,7 @@ class Space {
     public:
         void input(std::istream* source);  // read from *source
         // sets the volume of a unit cell
-        void set_axis_length(float length[3]);
+        void set_axis_length(double length[3]);
 
         int get_N() const {return this->num_spheres;}
         const double* get_coordinates() const {return this->axis_length;} // useless?
@@ -35,7 +35,7 @@ class Space {
 
     private:
         int num_spheres = 0;  // total number of spheres
-        float volume = 0.0;
+        double volume = 0.0;
         double axis_length[3];
         int minimum_collisions = 0;
         std::vector<Sphere> collided_spheres;
