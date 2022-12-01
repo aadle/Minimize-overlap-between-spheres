@@ -8,6 +8,8 @@
 
 int main(int argc, char** argv)
 {
+   srand(time(nullptr));
+   #pragma omp parallel
    assert(argc > 1);
    auto start = std::chrono::steady_clock::now();
    
@@ -35,7 +37,7 @@ int main(int argc, char** argv)
    std::map<double, int> c = cube.get_components();
    std::vector<std::vector<Sphere>> p = cube.get_particles();
 
-   float coordi[3];
+   double coordi[3];
    for(auto comp = c.begin(); comp != c.end(); comp++)
       for(auto &m : p[comp->second]) {
          m.get_coordinates(coordi);

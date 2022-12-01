@@ -1,10 +1,12 @@
 #include "sphere.h"
 #include <iostream>
+#include <omp.h>
 
 int Sphere::check_collision(Sphere* other_s, const double box_size[3]) {
+   int tid = omp_get_thread_num();
    //cheks if this sphere is colliding with an other sphere(other_s) by using pythagoras
    double sq_distance = 0.0;
-
+   
    for (int i=0; i<3; i++){  
       // 1-dimensional distance
       double distance = other_s->coordinates[i] - this->coordinates[i];
@@ -28,6 +30,7 @@ int Sphere::check_collision(Sphere* other_s, const double box_size[3]) {
 }
 
 void Sphere::get_coordinates(double* result) {
+   int tid = omp_get_thread_num();
    // reads the coordinates into the array
    this->coordinates;
    for(int i = 0; i < 3; i++) {
@@ -36,6 +39,7 @@ void Sphere::get_coordinates(double* result) {
 }
 
 void Sphere::get_new_coords(double* result) {
+   int tid = omp_get_thread_num();
    // reads the new_coords into the array
    this->new_coords;
    for(int i = 0; i < 3; i++) {

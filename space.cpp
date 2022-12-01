@@ -1,6 +1,6 @@
 #include <iostream>
 #include "space.h"
-#include <mpi.h>
+#include <omp.h>
 
 /*
  * Majority of the code in Space::input is based off of Martin Horch's code file "box.cpp" which can be found here:
