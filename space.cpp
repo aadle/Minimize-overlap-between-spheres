@@ -3,11 +3,11 @@
 
 /*
  * Preface:
- * Majority of the code in Space::input is based off of Martin Horch's code file "box.cpp" which can be found here:
+ * Majority of the code in Space::input and Space::count_collisions is based off of Martin Horch's code file "box.cpp" which can be found here:
  * https://home.bawue.de/~horsch/teaching/inf205/src/pbc-mic.zip
  * The code files are released under the conditions of the CC BY-NC-SA 4.0 License. 
  * 
- * It has been modified slightly to accomodate the rest of our code.
+ * It has been modified to accomodate the rest of our code.
  */
 
 void Space::input(std::istream* source)
@@ -57,14 +57,17 @@ void Space::set_axis_length(double length[3]) {
 
 // Counts number of collisions occuring in the space
 long Space::count_collisions() {
+
+   // Initialize the spheres' collision variable.
    for(std::vector<Sphere> &sphere_vector : this->particles) {
          for(Sphere &kule : sphere_vector) {
             kule.set_collision(false);
          }
    }
-   long num_collisions = 0;
 
-   // iterate through unique pairs of components
+   long num_collisions = 0; 
+
+   // Iterate through unique pairs of components
    for(auto comp1 = this->components.begin(); comp1 != this->components.end(); comp1++)
       for(auto comp2 = comp1; comp2 != this->components.end(); comp2++) {
          
@@ -73,7 +76,7 @@ long Space::count_collisions() {
             for(auto i = this->particles[comp1->second].begin(); std::next(i) != this->particles[comp1->second].end(); i++){
                for(auto j = std::next(i); j != this->particles[comp2->second].end(); j++) {
                   
-                  // If sphere is colliding, increment number of collisions in the space 
+                  // If sphere is colliding, increment number of collisions in the space accordingly
                   num_collisions += i->move_and_check_collision(&(*j), this->axis_length);
                }
             }
@@ -84,7 +87,7 @@ long Space::count_collisions() {
             for(auto i = this->particles[comp1->second].begin(); i != this->particles[comp1->second].end(); i++)
                for(auto j = this->particles[comp2->second].begin(); j != this->particles[comp2->second].end(); j++) {
 
-                  // If sphere is colliding, increment number of collisions in the space 
+                  // If sphere is colliding, increment number of collisions in the space accordingly
                   num_collisions += i->move_and_check_collision(&(*j), this->axis_length);
             }
          }
@@ -95,7 +98,7 @@ long Space::count_collisions() {
 
 // General Monte Carlo simulation moving all spheres in the space.
 long Space::mc_min_collision(int num_iterations) {
-   this->randomize_all_coordinates();
+   // this->randomize_all_coordinates();
    this->minimum_collisions = count_collisions();
    for (long i = 0; i < num_iterations; i++) {
       for(std::vector<Sphere> &sphere_vector : this->particles) {
@@ -118,7 +121,7 @@ long Space::mc_min_collision(int num_iterations) {
 
 // Monte Carlo simulation only moving colliding spheres in the space.
 long Space::advance_mc_min_collision(int num_iterations) {
-   this->randomize_all_coordinates();
+   // this->randomize_all_coordinates();
    this->minimum_collisions = count_collisions();
    for (long i = 0; i < num_iterations; i++) {
       for(std::vector<Sphere> &sphere_vector : this->particles) {
@@ -141,6 +144,7 @@ long Space::advance_mc_min_collision(int num_iterations) {
    return this->minimum_collisions;
 }
 
+// Randomize the coordinates of each sphere within the box
 void Space::randomize_all_coordinates() {
    for(std::vector<Sphere> &sphere_vector : this->particles) {
          for(Sphere &kule : sphere_vector) {
@@ -155,8 +159,9 @@ void Space::randomize_all_coordinates() {
    
 }
 
+// Non Monte Carlo solution to minimize the collisions
 long Space::do_collision_min_collision(int num_iterations) {
-   this->randomize_all_coordinates();
+   // this->randomize_all_coordinates();
    this->minimum_collisions = count_collisions();
    for (long i = 0; i < num_iterations; i++) {
       for(std::vector<Sphere> &sphere_vector : this->particles) {

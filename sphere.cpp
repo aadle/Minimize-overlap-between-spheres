@@ -9,7 +9,7 @@ int Sphere::check_collision(Sphere* other_s, const double box_size[3]) {
       // 1-dimensional distance
       double distance = other_s->coordinates[i] - this->coordinates[i];
 
-      sq_distance += distance*distance;
+      sq_distance += distance*distance; // sum the square distances
    }
    double sum_radius = (this->radius + other_s->radius);
    //if the distance between thw spheres are larger then the sum of the radius, they are overlapping.
@@ -27,16 +27,16 @@ int Sphere::check_collision(Sphere* other_s, const double box_size[3]) {
    return collision; 
 }
 
+// reads the coordinates into the array
 void Sphere::get_coordinates(double* result) {
-   // reads the coordinates into the array
    this->coordinates;
    for(int i = 0; i < 3; i++) {
       result[i] = coordinates[i];
    }
 }
 
+// reads the new_coords into the array
 void Sphere::get_new_coords(double* result) {
-   // reads the new_coords into the array
    this->new_coords;
    for(int i = 0; i < 3; i++) {
       result[i] = new_coords[i];
@@ -110,15 +110,15 @@ void Sphere::wall_collision(Sphere* other_s, const double box_size[3]) {
    other_s->move_new_coords(collision_amount);
 }
 
-void Sphere::print_coordinates(){
-   // print the coordinates to the sphere
+// print the coordinates to the sphere
+void Sphere::print_coordinates() {
    for(int i=0; i<3; i++){
       std::cout << this->coordinates[i] << "\t";
    }
    std::cout << "\n";
 }
 
-
+// randomize the sphere's coordinates within the box
 void Sphere::randomize_new_coords(const double box_size[3]) {
    double radius = this->radius;
    this->new_coords[0] = radius + (rand() / ( RAND_MAX / ((box_size[0] - radius) - radius) ) );
