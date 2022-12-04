@@ -85,7 +85,6 @@ int Sphere::move_and_check_collision(Sphere* other_s, const double box_size[3]) 
          this->wall_collision(other_s, box_size); //moves both spheres so they do not collide with each other or the wall
       }
       else{
-         std::cout<<"h";
          this->randomize_new_coords(box_size);
       }
    }   
