@@ -126,6 +126,8 @@ int Space::mc_min_collision() {
 
 // Monte Carlo simulation only moving colliding spheres in the space.
 int Space::advance_mc_min_collision() {
+   this->randomize_all_coordinates();
+   this->minimum_collisions=count_collisions();
    for (int i = 0; i < 10000; i++) {
       for(std::vector<Sphere> &sphere_vector : this->particles) {
          for(Sphere &kule : sphere_vector) {
@@ -160,12 +162,14 @@ void Space::randomize_all_coordinates() {
             new_coords[2] = radius + (rand() / ( RAND_MAX / ((this->axis_length[2]-radius)-radius) ) );
             kule.set_coordinates(new_coords);
          }; 
-      }
+   }
+   
 }
 
-int Space::do_collision_min_collision() {
-   this->minimum_collisions=100;
-   for (int i = 0; i < 30; i++) {
+long Space::do_collision_min_collision() {
+   this->randomize_all_coordinates();
+   this->minimum_collisions=count_collisions();
+   for (int i = 0; i < 10000; i++) {
       for(std::vector<Sphere> &sphere_vector : this->particles) {
          for(Sphere &kule : sphere_vector) {
             if (kule.get_collision()){
@@ -173,10 +177,10 @@ int Space::do_collision_min_collision() {
             }
          }
       }
-      int collisions = this->count_collisions();
+      long collisions = this->count_collisions();
       if(this->minimum_collisions > collisions) {this->minimum_collisions=collisions;}
       if (collisions == 0){
-         std::cout << i << "\n";
+         std::cout <<"got 0 collisions after" <<i << "craches\n";
          return 0;
       }
    }

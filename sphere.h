@@ -46,6 +46,7 @@ class Sphere{
             this->coordinates[1]=this->new_coords[1];
             this->coordinates[2]=this->new_coords[2];
         };
+        void randomize_new_coords(const double box_size[3]);
         void print_coordinates();
 
          

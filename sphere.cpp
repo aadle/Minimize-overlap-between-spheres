@@ -84,6 +84,10 @@ int Sphere::move_and_check_collision(Sphere* other_s, const double box_size[3]) 
          other_s->move_new_coords(s2_collide_amount);
          this->wall_collision(other_s, box_size); //moves both spheres so they do not collide with each other or the wall
       }
+      else{
+         std::cout<<"h";
+         this->randomize_new_coords(box_size);
+      }
    }   
    return collision;
 }
@@ -116,5 +120,13 @@ void Sphere::print_coordinates(){
       std::cout<<this->coordinates[i]<<"\t";
    }
    std::cout<<"\n";
+}
+
+
+void Sphere::randomize_new_coords(const double box_size[3]){
+   double radius = this->radius;
+   this->new_coords[0] = radius + (rand() / ( RAND_MAX / ((box_size[0] - radius) - radius) ) );
+   this->new_coords[1] = radius + (rand() / ( RAND_MAX / ((box_size[1] - radius) - radius) ) );
+   this->new_coords[2] = radius + (rand() / ( RAND_MAX / ((box_size[2] - radius) - radius) ) );
 }
 
