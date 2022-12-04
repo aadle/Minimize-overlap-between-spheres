@@ -1,20 +1,21 @@
 #include <iostream>
 #include "space.h"
-#include <omp.h>
 
 /*
+ * Preface:
  * Majority of the code in Space::input is based off of Martin Horch's code file "box.cpp" which can be found here:
  * https://home.bawue.de/~horsch/teaching/inf205/src/pbc-mic.zip
  * The code files are released under the conditions of the CC BY-NC-SA 4.0 License. 
  * 
  * It has been modified slightly to accomodate the rest of our code.
  */
+
 void Space::input(std::istream* source)
 {
    // first input size of the box
    *source >> this->axis_length[0] >> this->axis_length[1] >> this->axis_length[2];
    
-   int sphere_id = 0;
+   long sphere_id = 0;
    size_t num_objects = 0;  // number of particles of a certain component
 
    *source >> num_objects;  // input number of particles of component 0
@@ -62,7 +63,6 @@ long Space::count_collisions() {
          }
    }
    long num_collisions = 0;
-   this->collided_spheres.clear();
 
    // iterate through unique pairs of components
    for(auto comp1 = this->components.begin(); comp1 != this->components.end(); comp1++)
@@ -73,11 +73,8 @@ long Space::count_collisions() {
             for(auto i = this->particles[comp1->second].begin(); std::next(i) != this->particles[comp1->second].end(); i++){
                for(auto j = std::next(i); j != this->particles[comp2->second].end(); j++) {
                   
-                  // If sphere is colliding, increment number of collisions in the space and place them in the collided_spheres vector.
-                  if(i->move_and_check_collision(&(*j), this->axis_length)) {
-                     num_collisions++;
-                     this->collided_spheres.push_back(*j);
-                  }
+                  // If sphere is colliding, increment number of collisions in the space 
+                  num_collisions += i->move_and_check_collision(&(*j), this->axis_length);
                }
             }
          }
@@ -87,11 +84,8 @@ long Space::count_collisions() {
             for(auto i = this->particles[comp1->second].begin(); i != this->particles[comp1->second].end(); i++)
                for(auto j = this->particles[comp2->second].begin(); j != this->particles[comp2->second].end(); j++) {
 
-                  // If sphere is colliding, increment number of collisions in the space and place them in the collided_spheres vector.
-                  if(i->move_and_check_collision(&(*j), this->axis_length)) {
-                     num_collisions++;
-                     this->collided_spheres.push_back(*j);
-                  }
+                  // If sphere is colliding, increment number of collisions in the space 
+                  num_collisions += i->move_and_check_collision(&(*j), this->axis_length);
             }
          }
       }
@@ -100,9 +94,10 @@ long Space::count_collisions() {
 }
 
 // General Monte Carlo simulation moving all spheres in the space.
-int Space::mc_min_collision() {
-   this->minimum_collisions=10;
-   for (int i = 0; i < 1000; i++) {
+long Space::mc_min_collision(int num_iterations) {
+   this->randomize_all_coordinates();
+   this->minimum_collisions = count_collisions();
+   for (long i = 0; i < num_iterations; i++) {
       for(std::vector<Sphere> &sphere_vector : this->particles) {
          for(Sphere &kule : sphere_vector) {
             const double radius = kule.get_radius();
@@ -115,20 +110,17 @@ int Space::mc_min_collision() {
             kule.set_coordinates(new_coords);
          }
       }
-      int collisions = this->count_collisions();
+      long collisions = this->count_collisions();
       if(this->minimum_collisions > collisions) {this->minimum_collisions=collisions;}
-
-      // If minimum_collisions is 0, terminate the loop.
-      if(this->minimum_collisions == 0) {return this->minimum_collisions;}
    }
    return this->minimum_collisions;
 }
 
 // Monte Carlo simulation only moving colliding spheres in the space.
-int Space::advance_mc_min_collision() {
+long Space::advance_mc_min_collision(int num_iterations) {
    this->randomize_all_coordinates();
-   this->minimum_collisions=count_collisions();
-   for (int i = 0; i < 10000; i++) {
+   this->minimum_collisions = count_collisions();
+   for (long i = 0; i < num_iterations; i++) {
       for(std::vector<Sphere> &sphere_vector : this->particles) {
          for(Sphere &kule : sphere_vector) {
             if (kule.get_collision()) {
@@ -143,11 +135,8 @@ int Space::advance_mc_min_collision() {
             }
          }
       }
-      int collisions = this->count_collisions();
+      long collisions = this->count_collisions();
       if(this->minimum_collisions > collisions) {this->minimum_collisions=collisions;}
-      
-      // If minimum_collisions is 0, terminate the loop.
-      if(this->minimum_collisions == 0) {return this->minimum_collisions;}
    }
    return this->minimum_collisions;
 }
@@ -166,21 +155,21 @@ void Space::randomize_all_coordinates() {
    
 }
 
-long Space::do_collision_min_collision() {
+long Space::do_collision_min_collision(int num_iterations) {
    this->randomize_all_coordinates();
-   this->minimum_collisions=count_collisions();
-   for (int i = 0; i < 10000; i++) {
+   this->minimum_collisions = count_collisions();
+   for (long i = 0; i < num_iterations; i++) {
       for(std::vector<Sphere> &sphere_vector : this->particles) {
          for(Sphere &kule : sphere_vector) {
-            if (kule.get_collision()){
+            if (kule.get_collision()) {
                kule.update_coordinates();
             }
          }
       }
       long collisions = this->count_collisions();
-      if(this->minimum_collisions > collisions) {this->minimum_collisions=collisions;}
-      if (collisions == 0){
-         std::cout <<"got 0 collisions after" <<i << "craches\n";
+      if(this->minimum_collisions > collisions) {this->minimum_collisions = collisions;}
+      if (collisions == 0) {
+         std::cout <<"got 0 collisions after" << i << "craches\n";
          return 0;
       }
    }
